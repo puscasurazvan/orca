@@ -86,8 +86,9 @@ export function prepareLocalWorkerStart(args: {
     !params.agent && !params.terminal
       ? inheritedRetryWorkerLaunchSelection(db, params.retryOf)
       : null
-  // Why: an effort belongs to its model's ladder, so a new --model never inherits the old effort.
-  const inheritedEffort = params.model ? undefined : inherited?.effort
+  // Why: an effort belongs to its model's ladder, so only a different --model drops the recorded effort.
+  const inheritedEffort =
+    params.model && params.model !== inherited?.model ? undefined : inherited?.effort
   return resolveWorkerStartAgent({
     runtime,
     terminal: params.terminal,

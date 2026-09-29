@@ -44,7 +44,7 @@ export const ORCHESTRATION_WORKER_COMMAND_SPECS: CommandSpec[] = [
       'Not every worker has a terminal. Read output with worker-read --source auto or --source transcript, which always work; --source terminal is refused when there is none, and orca terminal verbs do not accept every worker handle. Nothing above needs you to know which kind you have — the orchestration verbs cover all of them.',
       '--on selects only the worker server; the Run and this command remain on the current Orca server.',
       'Remote current and new-child are invalid; discover an exact remote selector or use new-top-level.',
-      "--retry-of needs --task naming the failed Task (--spec creates a new one) and does not inherit placement; repeat the intended --on/worktree choice. --agent or --terminal is required, except that a --retry-of omitting both inherits the retried Dispatch's recorded --agent/--model/--effort (a new --model drops the recorded --effort); passing either overrides that.",
+      "--retry-of needs --task naming the failed Task (--spec creates a new one) and does not inherit placement; repeat the intended --on/worktree choice. --agent or --terminal is required, except that a local --retry-of (no --on) omitting both inherits the retried Dispatch's recorded --agent/--model/--effort (a different --model drops the recorded --effort); passing either overrides that. A remote start (--on) still needs --agent or --terminal.",
       'The call exits 0 only for ready. Failed or outcome_unknown exits 1 and JSON includes stage/failedStage, setup, effects, residualResources, and recovery commands when needed.'
     ]
   },

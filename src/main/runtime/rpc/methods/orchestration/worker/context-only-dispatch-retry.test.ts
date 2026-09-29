@@ -104,6 +104,18 @@ describe('worker-start --retry-of inherits the retried launch selection', () => 
     ).resolves.toEqual({ agent: 'codex', model: 'gpt-5.5', effort: null })
   })
 
+  it('keeps the recorded effort when --model repeats the recorded model', async () => {
+    const { taskId, dispatchId } = await harness.startSettledWorker('failed', {
+      agent: 'codex',
+      model: 'gpt-5.6-sol',
+      effort: 'ultra'
+    })
+
+    await expect(
+      retrySelection({ task: taskId, retryOf: dispatchId, model: 'gpt-5.6-sol' })
+    ).resolves.toEqual({ agent: 'codex', model: 'gpt-5.6-sol', effort: 'ultra' })
+  })
+
   it('applies an explicit --effort to the inherited model', async () => {
     const { taskId, dispatchId } = await harness.startSettledWorker('failed', {
       agent: 'codex',
