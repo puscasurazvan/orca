@@ -7,7 +7,9 @@ import type { TuiAgent } from '../../../../../../shared/tui-agent'
 
 type WorkerStartOptions = { terminal?: string; agent?: TuiAgent }
 
-function isWorkerStartResult(value: unknown): value is { state: 'ready'; dispatchId: string } {
+export function isWorkerStartResult(
+  value: unknown
+): value is { state: 'ready'; dispatchId: string } {
   return (
     typeof value === 'object' &&
     value !== null &&
