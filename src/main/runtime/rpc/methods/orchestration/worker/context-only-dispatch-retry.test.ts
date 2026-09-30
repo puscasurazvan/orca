@@ -140,6 +140,31 @@ describe('worker-start --retry-of inherits the retried launch selection', () => 
     ).resolves.toEqual({ agent: 'claude', model: null, effort: null })
   })
 
+  it('inherits nothing when an explicit --terminal is passed on retry', async () => {
+    const { taskId, dispatchId } = await harness.startSettledWorker('failed', {
+      agent: 'codex',
+      model: 'gpt-5.6-sol',
+      effort: 'ultra'
+    })
+
+    const retried = await harness.call('orchestration.workerStart', {
+      task: taskId,
+      from: 'term_coord',
+      terminal: 'term_reminted',
+      retryOf: dispatchId
+    })
+    if (!isWorkerStartResult(retried)) {
+      throw new Error('Expected worker-start to return a ready dispatch')
+    }
+
+    const startOptions: unknown = JSON.parse(
+      harness.db.getWorkerDispatch(retried.dispatchId)?.start_options ?? '{}'
+    )
+    expect(startOptions).toMatchObject({
+      launch: { requested: { agent: null, model: null, effort: null } }
+    })
+  })
+
   it('still raises the missing-agent error when --retry-of names an unknown Dispatch', async () => {
     const task = harness.db.createTask({ spec: 'orphan retry', runId: harness.activeRunId })
 
